@@ -7,7 +7,11 @@
 //
 
 #import "AppDelegate.h"
-
+#import "WBTabBarController.h"
+#import "WBNewfeatureViewController.h"
+#import "OAuthViewController.h"
+#import "WBChooseRootVcTool.h"
+#import "WBAccountTool.h"
 @interface AppDelegate ()
 
 @end
@@ -16,7 +20,40 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    
+    self.window=[[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
+    
+    [self.window makeKeyAndVisible];
+    //取出数据
+    WBCount *account=[WBAccountTool Account];
+    NSLog(@"%@",account);
+    
+    //判断是否存有登录信息
+    if (!account) {
+       
+        self.window.rootViewController=[[OAuthViewController alloc]init];
+
+    }else{
+        //iOS8下，卸载app并不会删除defaults的数据，所以演示时需要手动清除数据
+        NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
+//        [defaults removeObjectForKey:@"CFBundleVersion"];
+//        [defaults synchronize];
+        
+        NSString *doc=[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)lastObject];
+        
+        //选择根控制器
+        [WBChooseRootVcTool Choose:defaults];
+
+    }
+    
+    
+    
+    
+    
+
+    
+    
+    
     return YES;
 }
 
